@@ -9,7 +9,7 @@ var SudokuBoard = (function () {
 
   'use strict';
 
-  function Board(size, data) {
+  function Board(size, data, value) {
     this.size   = size;
     this.board  = [];
     if (typeof data !== 'undefined') {
@@ -17,7 +17,7 @@ var SudokuBoard = (function () {
     } else {
       var index;
       for (index = 0; index < size * size * size * size; index += 1) {
-        this.board.push('0');
+        this.board.push(value);
       }
     }
   }
@@ -73,9 +73,47 @@ var SudokuBoard = (function () {
     return map;
   }
 
+  function uniqueLength(list) {
+    var item, seen, out, i, j;
+    seen = {}
+    out  = [];
+    for (i = 0, j = 0; i < list.length; i++) {
+      item = list[i];
+      if (seen[item] !== true) {
+        seen[item] = true;
+        out[j++]   = item;
+      }
+    }
+    return out;
+  }
+
+  function checkAllDiff(map) {
+    var index;
+    for (index = 0; index < map.length; index += 1) {
+      if (map[index].length !== uniqueLength(map[index]).length) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   return {
     newBoard: function (rank, data) {
-      return new Board(rank, data);
+      return new Board(rank, data, '');
+    },
+    newMarkBoard: function (rank, data) {
+      var index, values = [];
+      for (index = 0; index < rank * rank; index += 1) {
+        values.push('');
+      }
+      return new Board(rank, data, values);
+    },
+    checkBoard: function (board) {
+      var judge = true;
+      judge = judge && checkAllDiff(board.toRowHouse());
+      judge = judge && checkAllDiff(board.toColHouse());
+      judge = judge && checkAllDiff(board.toBoxHouse());
+      return judge;
     }
   }
 }());

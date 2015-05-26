@@ -25,6 +25,7 @@ pre {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
+  word-break: break-word;
 }
 
 /**
@@ -190,6 +191,7 @@ pre {
   box-sizing: border-box;
   height: 21em;
   margin: 0; padding: 1em;
+  line-height: 1.4em;
   overflow: scroll;
 }
 
@@ -245,11 +247,11 @@ pre {
   box-sizing: border-box;
   width: 16px; height: 16px;
   padding-top: 1px;
-  color: #505050;
-  font-size: 8px;
+  color: #959595;
+  font-size: 14px;
 }
 
-.board-given {
+.board-point {
   position: absolute;
   top: 0; bottom: 0; left: 0;
   display: inline-block;
