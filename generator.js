@@ -106,42 +106,33 @@ var Generator = (function (Solver) {
 		return board
 	}
 	function digging(board,element,size){
-		// while(element != 0){
-		// 	var count_logic = 0
-		// 	var count_size = 1
-		// 	var x = Math.round(Math.random()*(size-1))
-		// 	var y = Math.round(Math.random()*(size-1))
-		// 	var logic = false
-		// 	var main = board[y][x]
-		// 	if (board[y][x] == ""){
-		// 		continue
-		// 	}
-		// 	while(count_size != size + 1){
-		// 		board[y][x] = count_size.toString()
-		// 		var logic = Solver.makeSolve(board,false)
-		// 		if (logic){
-		// 			count_logic++
-		// 		}
-
-		// 		count_size++
-		// 	}
-		// 	if (count_logic == 1){
-		// 		board[y][x] = ""
-		// 		element-- 
-		// 	}
-		// 	element--
-		// 	//console.log(Solver.makeSolve)
-		// }	
-		// Solver.print(board)
-		// return board
-		var x = Solver
-		x.makeSolve(board)
-		setTimeout(function(){
-			console.log(x.makeSolve)
-			x.makeSolve(board)
-			
-		},5000)
-		
+		while(element != 0){
+			var count_logic = 0
+			var count_size = 1
+			var x = Math.round(Math.random()*(size-1))
+			var y = Math.round(Math.random()*(size-1))
+			var logic = false
+			var main = board[y][x]
+			if (board[y][x] == ""){
+				continue
+			}
+			while(count_size != size + 1){
+				//console.log(count_logic)
+				board[y][x] = count_size.toString()
+				Solver.print(board)
+				var logic = Solver.makeSolve(board,false)
+				console.log(logic)
+				if (logic){
+					count_logic++
+				}
+				count_size++
+			}
+			if (count_logic >= 1){
+				board[y][x] = ""
+				element-- 
+			}
+			//console.log(Solver.makeSolve)
+		}	
 		return board
 	}
 	function main(){
@@ -153,9 +144,16 @@ var Generator = (function (Solver) {
 			x = sudoku_generator(board,size)
 		}
 		board = change_format(board,size)
-		var element = 20
+		var element = 10
 		board = digging(board,element,size)
-		Solver.print(board)
+
+		//Solver.print(board)
+		// var x = Solver.makeSolve(board)
+		// console.log(x)
+		// board[0][0] = "1"
+		// var x = Solver.makeSolve(board)
+		// console.log(x)
+		//Solver.print(board)
 	}
 	main()
 }(Solver));

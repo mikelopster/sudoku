@@ -53,6 +53,63 @@ var Solver = (function () {
 		return true;
 	}
 
+	function CheckTableRowIsTrue() {
+
+		for(var i = 0 ; i < n* n ; i++) {
+			var checkRow = []
+			for(var j = 0 ; j < n*n ; j++) {
+				if(checkRow.indexOf(sudokuTable[i][j]) == -1) {
+					checkRow.push(sudokuTable[i][j]);
+				}
+			}
+
+			if(checkRow.length != 9)
+				return false;
+		}
+
+		return true;
+	}
+
+	function CheckTableColIsTrue() {
+		for(var i = 0 ; i < n* n ; i++) {
+			var checkCol = []
+			for(var j = 0 ; j < n*n ; j++) {
+				if(checkCol.indexOf(sudokuTable[j][i]) == -1) {
+					checkCol.push(sudokuTable[j][i]);
+				}
+			}
+
+			if(checkCol.length != 9)
+				return false;
+		}
+
+		return true;
+	}
+
+	function CheckTableBlockIsTrue() {
+		for(var i = 0 ; i < n*n ; i+=3) {
+			for(var j = 0 ; j < n*n ; j+=3) {
+
+
+				var checkBlock = [];
+
+				for(var k = i ; k < i+3 ; k++) {
+					for(var l = j ; l < j+3 ; l++) {
+						if(checkBlock.indexOf(sudokuTable[k][l]) == -1) {
+							checkBlock.push(sudokuTable[k][l]);
+						}
+					}
+				}
+
+				if(checkBlock.length != 9)
+					return false; 
+
+			}
+		}
+
+		return true;
+	}
+
 	function CheckErrorTable() {
 		for(var i = 0 ; i < n* n ; i++)
 			for(var j = 0 ; j < n*n ; j++) {
@@ -1102,7 +1159,7 @@ var Solver = (function () {
 
 				return ;
 		}else {
-			SudokuSolved = true;
+			solved = true;
 			return ;
 		}
 	}
@@ -1201,9 +1258,9 @@ var Solver = (function () {
 
 		console.log("Sum Log: " + LogSudokuTable.length);
 		showResultTable();
-		//console.log("Check Table Row: " + CheckTableRowIsTrue());
-		//console.log("Check Table Col: " + CheckTableColIsTrue());
-		//console.log("Check Table Block: " + CheckTableBlockIsTrue());
+		console.log("Check Table Row: " + CheckTableRowIsTrue());
+		console.log("Check Table Col: " + CheckTableColIsTrue());
+		console.log("Check Table Block: " + CheckTableBlockIsTrue());
 		console.log("Solved: " + SudokuSolved);
 		printTable("Last Result");
 
@@ -1214,7 +1271,6 @@ var Solver = (function () {
 
 	return {
 		makeSolve: function(sudoArr,LoggingLogin) {
-			console.log(solved)
 			return solved(sudoArr,LoggingLogin);
 		},
 		print : function(sudoArr) {
