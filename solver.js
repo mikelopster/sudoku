@@ -1276,6 +1276,7 @@ var Solver = (function () {
 
 	return {
 		makeSolve: function(sudoArr,LoggingLogin) {
+			console.log(solved)
 			return solved(sudoArr,LoggingLogin);
 		},
 		print : function(sudoArr) {
