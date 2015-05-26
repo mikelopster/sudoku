@@ -1148,7 +1148,7 @@ var Solver = (function () {
 
 				return ;
 		}else {
-			solved = true;
+			SudokuSolved = true;
 			return ;
 		}
 	}

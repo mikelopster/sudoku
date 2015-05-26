@@ -105,6 +105,15 @@ var Generator = (function (Solver) {
 		}
 		return board
 	}
+	function change_payboard(board,size){
+		var x = [];
+		for(var i = 0 ; i < size ; i++){
+			for(var j = 0 ; j < size ; j++){
+				x.push(board[i][j])
+			}
+		}
+		return x
+	}
 	function digging(board,element,size){
 		while(element != 0){
 			var count_logic = 0
@@ -120,23 +129,30 @@ var Generator = (function (Solver) {
 				//console.log(count_logic)
 				board[y][x] = count_size.toString()
 				Solver.print(board)
-				var logic = Solver.makeSolve(board,false)
+				var kuy = board.map(function(arr) {
+					return arr.slice();
+				});
+
+				var logic = Solver.makeSolve(kuy,false)
 				console.log(logic)
 				if (logic){
 					count_logic++
 				}
 				count_size++
 			}
-			if (count_logic >= 1){
+			if (count_logic == 1 && board[y][x] != ""){
 				board[y][x] = ""
 				element-- 
+			}
+			else{
+				board[y][x] = main
 			}
 			//console.log(Solver.makeSolve)
 		}	
 		return board
 	}
-	function main(){
-	    var size = 9;
+	function main(element,size_pay){
+	    var size = size_pay*size_pay
 	    var board = board_generator(size)
 	    var x = [true,board]
 	    while(x[0]){
@@ -144,16 +160,11 @@ var Generator = (function (Solver) {
 			x = sudoku_generator(board,size)
 		}
 		board = change_format(board,size)
-		var element = 10
 		board = digging(board,element,size)
-
-		//Solver.print(board)
-		// var x = Solver.makeSolve(board)
-		// console.log(x)
-		// board[0][0] = "1"
-		// var x = Solver.makeSolve(board)
-		// console.log(x)
-		//Solver.print(board)
+		return SudokuBoard.newBoard(size_pay,change_payboard(board,size))
+		
 	}
-	main()
+	return {
+		generate: main
+	}
 }(Solver));
