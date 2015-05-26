@@ -1234,8 +1234,8 @@ var Solver = (function () {
 				}
 			}
 		}
-		console.log("Initialize");
-		showResultTable();
+		//console.log("Initialize");
+		//showResultTable();
 		InitAddNumbertoIntersect();
 
 		// fill Naked Single
@@ -1246,17 +1246,17 @@ var Solver = (function () {
 
 		BacktrackingSolvingFalse(0,sudokuTable,NumberCheckerCol,NumberCheckerRow,checkNumber);
 
-		console.log("Sum Log: " + LogSudokuTable.length);
-		showResultTable();
+		//console.log("Sum Log: " + LogSudokuTable.length);
+		//showResultTable();
 		var checkTableRow = CheckTableRowIsTrue();
 		var checkTableCol = CheckTableColIsTrue();
 		var checkTableBlock = CheckTableBlockIsTrue();
 
-		console.log("Check Table Row: " + checkTableRow);
-		console.log("Check Table Col: " + checkTableCol);
-		console.log("Check Table Block: " + checkTableBlock);
-		console.log("Solved: " + SudokuSolved);
-		printTable("Last Result");
+		// console.log("Check Table Row: " + checkTableRow);
+		// console.log("Check Table Col: " + checkTableCol);
+		// console.log("Check Table Block: " + checkTableBlock);
+		// console.log("Solved: " + SudokuSolved);
+		// printTable("Last Result");
 
 		return (SudokuSolved && checkTableRow && checkTableCol && checkTableBlock);
 
