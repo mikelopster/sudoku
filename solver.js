@@ -340,7 +340,7 @@ var Solver = (function () {
 			}
 		}
 
-		return currentSudokuTable;
+		return SudokuBoard.newBoard(3,currentSudokuTable);
 
 	}
 
@@ -353,7 +353,7 @@ var Solver = (function () {
 			}
 		}
 
-		return currentCheckNumber;
+		return SudokuBoard.newBoard(3,currentCheckNumber);
 	}
 
 	function getLoggingActionThisStep(index) {
