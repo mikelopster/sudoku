@@ -305,6 +305,35 @@ var Solver = (function () {
 		console.log(display);
 	}
 
+	function showResultInputTable(sudoArr) {
+		var display = "";
+		display += "-------------------\n";
+		for(var i = 0 ; i < n*n ; i++) {
+			display += "|";
+			for(var j = 0 ; j < n*n ;j++) {
+				//display += "(" + (i+1) + "," + (j+1) + ") ";
+				if(sudoArr[i][j] == "")
+					//display += "[" + checkNumber[i][j] + "]";
+					display += "_";
+				else
+					display += sudoArr[i][j];
+
+				if(j % 3 == 2)
+					display += "|";
+				else
+					display += " ";
+			}
+
+			display += "\n";
+
+			if(i% 3 == 2) {
+				display += "-------------------\n";
+			}
+		}
+		
+		console.log(display);
+	}
+
 	function showStep(index) {
 		var currentSudokuTable = LogSudokuTable[index];
 		var currentCheckNumber = LogCheckNumber[index];
@@ -1248,6 +1277,9 @@ var Solver = (function () {
 	return {
 		makeSolve: function(sudoArr,LoggingLogin) {
 			return solved(sudoArr,LoggingLogin);
+		},
+		print : function(sudoArr) {
+			showResultInputTable(sudoArr);
 		}
 	}
 }());
