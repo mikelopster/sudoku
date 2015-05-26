@@ -362,6 +362,20 @@ var Solver = (function () {
 		return currentAction;
 	}
 
+	function getSuccessBoard() {
+
+		var successBoard;
+
+		for(var i = 0 ; i < n*n ; i++) {
+			for(var j = 0 ; j < n*n ; j++) {
+				successBoard.push(sudokuTable[i][j]);
+			}
+		}
+
+		return SudokuBoard.newBoard(3,successBoard);
+
+	}
+
 
 	function getIndexChecknumber(arrCheckNumber,num) {
 		var found = 0;
@@ -1218,7 +1232,7 @@ var Solver = (function () {
 	}
 
 	function solved(sudokuArr,LoggingLogin) {
-		sudokuTable = sudokuArr;
+		sudokuTable = sudokuArr.toRowHouse();
 		LoggingEnabled = LoggingLogin;
 
 		SudokuSolved = false;
@@ -1278,6 +1292,9 @@ var Solver = (function () {
 		},
 		getLogAction : function(index) {
 			return getLoggingActionThisStep(index);
+		},
+		getSuccessBoard : function() {
+			return getSuccessBoard();
 		}
 	}
 }());
