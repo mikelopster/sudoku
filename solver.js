@@ -4,18 +4,17 @@
  * ============================================================================
  */
 
- var sudokuTable = [
-		["9","7","","","1","","","",""],
-		["8","","","","","","","6",""],
-		["","4","","5","","8","","","2"],
-		["5","","9","","","","","","6"],
-		["","","","","5","","","",""],
-		["4","","","","","","1","","3"],
-		["6","","","2","","3","","9",""],
-		["","3","","","","","","","8"],
-		["","","","","8","","","2","5"],
-	];
-
+var sudokuTable = SudokuBoard.newBoard(3);
+sudokuTable.board = 
+	["3","5","","","","","","8","1",
+	 "1","","9","","","","7","","4",
+	 "","7","","","9","","","3","",
+	 "","","","6","3","4","","","",
+	 "","","1","2","","9","6","","",
+	 "","","","7","1","8","","","",
+	 "","3","","","7","","","4","",
+	 "7","","8","","","","3","","2",
+	 "2","1","","","","","","9","7"];
 
 var Solver = (function () {
 
@@ -23,8 +22,6 @@ var Solver = (function () {
 
   var n = 3;
 	var sudokuTable;
-
-
 	var sumFill = 0;
 
 	var checkNumber = [];
@@ -334,37 +331,35 @@ var Solver = (function () {
 		console.log(display);
 	}
 
-	function showStep(index) {
-		var currentSudokuTable = LogSudokuTable[index];
-		var currentCheckNumber = LogCheckNumber[index];
-		var currentAction = LogAction[index];
+	function getLoggingSudokuTableThisStep(index) {
+		var currentSudokuTable;
 
-		var display = "";
-		display += "-------------------<br>";
 		for(var i = 0 ; i < n*n ; i++) {
-			display += "|";
-			for(var j = 0 ; j < n*n ;j++) {
-				if(currentSudokuTable[i][j] == "")
-					display += "[" + currentCheckNumber[i][j] + "]";
-				else
-					display += currentSudokuTable[i][j];
-
-				if(j % 3 == 2)
-					display += "|";
-				else
-					display += " ";
-			}
-
-			display += "<br>";
-
-			if(i% 3 == 2) {
-				display += "-------------------<br>";
+			for(var j = 0 ; j < n*n ; j++) {
+				currentSudokuTable.push(LogSudokuTable[index][i][j]);
 			}
 		}
 
-		$("#sudokuTable").html(display);
-		$("#detail").html(currentAction);
+		return currentSudokuTable;
 
+	}
+
+	function getLoggingSudokuCheckNumberThisStep(index) {
+		var currentCheckNumber;
+
+		for(var i = 0 ; i < n*n ; i++) {
+			for(var j = 0 ; j < n*n ; j++) {
+				currentCheckNumber.push(LogCheckNumber[index][i][j]);
+			}
+		}
+
+		return currentCheckNumber;
+	}
+
+	function getLoggingActionThisStep(index) {
+		var currentAction = LogAction[index];
+
+		return currentAction;
 	}
 
 
@@ -1281,6 +1276,15 @@ var Solver = (function () {
 		},
 		print : function(sudoArr) {
 			showResultInputTable(sudoArr);
+		},
+		getLogBoard : function(index) {
+			return getLoggingSudokuTableThisStep(index);
+		},
+		getLogMarkBoard : function(index) {
+			return getLoggingSudokuCheckNumberThisStep(index);
+		},
+		getLogAction : function(index) {
+			return getLoggingActionThisStep(index);
 		}
 	}
 }());
