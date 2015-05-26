@@ -1248,11 +1248,6 @@ var Solver = (function () {
 
 		console.log("Sum Log: " + LogSudokuTable.length);
 		showResultTable();
-<<<<<<< HEAD
-		console.log("Check Table Row: " + CheckTableRowIsTrue());
-		console.log("Check Table Col: " + CheckTableColIsTrue());
-		console.log("Check Table Block: " + CheckTableBlockIsTrue());
-=======
 		var checkTableRow = CheckTableRowIsTrue();
 		var checkTableCol = CheckTableColIsTrue();
 		var checkTableBlock = CheckTableBlockIsTrue();
@@ -1260,7 +1255,6 @@ var Solver = (function () {
 		console.log("Check Table Row: " + checkTableRow);
 		console.log("Check Table Col: " + checkTableCol);
 		console.log("Check Table Block: " + checkTableBlock);
->>>>>>> 4624e2181c92e788267e4576a159344675ded47f
 		console.log("Solved: " + SudokuSolved);
 		printTable("Last Result");
 
