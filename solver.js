@@ -30,7 +30,7 @@ var Solver = (function () {
 	var checkNumber = [];
 	var NumberCheckerRow = [];
 	var NumberCheckerCol = [];
-	var solved = false;
+	var SudokuSolved = false;
 	var detailSolved = "";
 
 	var LoggingEnabled = true;
@@ -264,8 +264,8 @@ var Solver = (function () {
 	}
 
 	function printTable(title) {
-		for(i = 0 ;i <  n*n; i++)
-			for(j = 0 ;j < n*n ;j++) {
+		for(var i = 0 ;i <  n*n; i++)
+			for(var j = 0 ;j < n*n ;j++) {
 				if(checkNumber[i][j].length == 0)
 					if(sudokuTable[i][j] == "")
 						console.log(title+": (" + (i+1) + "," + (j+1) + ") = " + sudokuTable[i][j] + "[error]");
@@ -1040,7 +1040,7 @@ var Solver = (function () {
 	}
 
 	function BacktrackingSolvingFalse(index,old_temp_sudokuTable,old_temp_NumberCheckerCol,old_temp_NumberCheckerRow,old_temp_checkNumber) {
-		if(solved) return;
+		if(SudokuSolved) return;
 
 		executeTable();
 
@@ -1105,7 +1105,7 @@ var Solver = (function () {
 					}
 				}
 
-				if(!solved) {
+				if(!SudokuSolved) {
 					// not found
 					sudokuTable = old_temp_sudokuTable.map(function(arr) {
 						return arr.slice();
@@ -1141,7 +1141,7 @@ var Solver = (function () {
 	}
 
 	function BacktrackingSolvingTrue(index,x,y,temp_sudokuTable,temp_NumberCheckerCol,temp_NumberCheckerRow,temp_checkNumber) {
-		if(solved) return;
+		if(SudokuSolved) return;
 
 		executeTable();
 
@@ -1198,7 +1198,7 @@ var Solver = (function () {
 				BacktrackingSolvingFalse(0,temp_sudokuTable,temp_NumberCheckerCol,temp_NumberCheckerRow,temp_checkNumber);
 			}
 		}else {
-			solved = true;
+			SudokuSolved = true;
 			return ;
 		}
 			
@@ -1208,11 +1208,11 @@ var Solver = (function () {
 		sudokuTable = sudokuArr;
 		LoggingEnabled = LoggingLogin;
 
-		solved = false;
+		SudokuSolved = false;
 		// start search
-		for(i = 0 ; i < n*n ; i++) {
+		for(var i = 0 ; i < n*n ; i++) {
 			InitCheckNumber(i);
-			for(j = 0 ; j < n*n ; j++) { 
+			for(var j = 0 ; j < n*n ; j++) { 
 				if(sudokuTable[i][j] == "") {
 					checkRow(i,j);
 					checkCol(i,j);
@@ -1237,17 +1237,17 @@ var Solver = (function () {
 		console.log("Check Table Row: " + CheckTableRowIsTrue());
 		console.log("Check Table Col: " + CheckTableColIsTrue());
 		console.log("Check Table Block: " + CheckTableBlockIsTrue());
-		console.log("Solved: " + solved);
+		console.log("Solved: " + SudokuSolved);
 		printTable("Last Result");
 
-		return solved;
+		return SudokuSolved;
 
 	}
 
 
 	return {
 		makeSolve: function(sudoArr,LoggingLogin) {
-			solved(sudoArr,LoggingLogin);
+			return solved(sudoArr,LoggingLogin);
 		}
 	}
 }());
