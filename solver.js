@@ -217,7 +217,7 @@ var Solver = (function () {
 			var index = checkNumber[r][i].indexOf(value);
 			if(index != -1) {
 				checkNumber[r][i].splice(index, 1);
-				checkEmpty(r,i);
+				//checkEmpty(r,i);
 			}
 
 		}
@@ -228,7 +228,7 @@ var Solver = (function () {
 			var index = checkNumber[i][c].indexOf(value);
 			if(index != -1) {
 				checkNumber[i][c].splice(index, 1);
-				checkEmpty(i,c);
+				//checkEmpty(i,c);
 			}
 		}
 	}
@@ -242,7 +242,7 @@ var Solver = (function () {
 				var index = checkNumber[i][j].indexOf(value);
 				if(index != -1) {
 					checkNumber[i][j].splice(index, 1);
-					checkEmpty(i,j);
+					//checkEmpty(i,j);
 				}
 			}
 		} 
@@ -455,7 +455,7 @@ var Solver = (function () {
 			if(index != -1) {
 				operation = true;
 				checkNumber[r][i].splice(index, 1);
-				checkEmpty(r,i);
+				//checkEmpty(r,i);
 				//console.log("Delete AT: col = " + (i+1) + ": " + checkNumber[r][i]);
 			}
 		}
@@ -485,7 +485,7 @@ var Solver = (function () {
 					if(index != -1) {
 						operation = true;
 						checkNumber[r][i].splice(index, 1);
-						checkEmpty(r,i);
+						//checkEmpty(r,i);
 					}
 				}
 			}
@@ -514,7 +514,7 @@ var Solver = (function () {
 					if(index != -1) {
 						operation = true;
 						checkNumber[i][c].splice(index, 1);
-						checkEmpty(i,c);
+						//checkEmpty(i,c);
 					}
 				}
 			}
@@ -548,7 +548,7 @@ var Solver = (function () {
 						if(index != -1) {
 							operation = true;
 							checkNumber[i][j].splice(index, 1);
-							checkEmpty(i,j);
+							//checkEmpty(i,j);
 						}
 					}
 				}
@@ -571,7 +571,7 @@ var Solver = (function () {
 			var index = checkNumber[i][c].indexOf(value);
 			if(index != -1) {
 				checkNumber[i][c].splice(index, 1);
-				checkEmpty(i,c);
+				//checkEmpty(i,c);
 			}
 		}
 
