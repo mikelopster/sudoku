@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Ubuntu+Mono'>
+    <link rel='stylesheet' href='style.css'>
+    <title>Sudoku</title>
+  </head>
+  <body>
+    <nav class='nav'>
+      <div class='nav-item item-terminal'>
+        <div class='nav-item-label'>&lt;/&gt;</div>
+        <div class='nav-item-container'>
+          <div class='terminal'>
+            <ul class='terminal-display'></ul>
+            <input class='terminal-input' placeholder="Press 'Tab' and type command here">
+          </div>
+        </div>
+      </div>
+      <div class='nav-item item-monitor'>
+        <div class='nav-item-label'>[-]</div>
+        <div class='nav-item-container'>
+          <div class='monitor'>
+            <pre class='monitor-display'></pre>
+            <div class='monitor-panel'>
+              <button class='monitor-button solve'>Solve</button>
+              <button class='monitor-button next'>Next</button>
+              <button class='monitor-button clear'>Clear</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class='scroller'>
+      <div class='board-wrapper'>
+        <div class='board'></div>
+      </div>
+    </div>
+    <div class='watermark'>Sudoku</div>
+    <script src='script.js'></script>
+    <script src='sudokuboard.js'></script>
+    <script src='renderer.js'></script>
+    <script src='generator.js'></script>
+  </body>
+</html>

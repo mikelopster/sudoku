@@ -1,0 +1,279 @@
+
+/**
+ * Base Rule
+ * ======================================
+ */
+
+body {
+  position: relative;
+  display: block;
+  margin: 0; padding: 0;
+  color: #cecece;
+  background-image: url('texture.jpg');
+  font-family: 'Ubuntu Mono', 'monospace';
+  font-size: 14px;
+}
+
+pre {
+  display: inline;
+  padding: 0; margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/**
+ * Layout Rule
+ * ======================================
+ */
+
+.nav {
+  z-index: 10;
+  position: fixed;
+  top: 0; left: 0;
+  display: block;
+  margin-top: 56px;
+}
+
+.nav-item {
+  position: relative;
+  display: block;
+  margin-left: 0;
+  margin-bottom: 8px;
+  transition: all 0.6s ease-in-out;
+}
+
+.nav-item-label {
+  position: relative;
+  display: inline-block;
+  width: 72px; height: 72px;
+  padding-left: 24px;
+  margin-left: -24px;
+  background-color: #353535;
+  box-shadow: 0 4px 8px 2px #252525;
+  font-size: 1.5em;
+  line-height: 72px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.nav-item-label:hover {
+  margin-left: 0;
+}
+
+.nav-item-container {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  display: block;
+  background-color: #353535;
+  box-shadow: 0 4px 8px 2px #252525;
+}
+
+.nav-item.showup {
+  z-index: 10;
+}
+
+.nav-item.showup > .nav-item-label:hover {
+  margin-left: -24px;
+}
+
+.nav-item.item-terminal > .nav-item-label {
+  border-right: 4px solid #e25959;
+}
+
+.nav-item.item-terminal > .nav-item-container {
+  left: -640px;
+  width: 640px; height: 24em;
+}
+
+.nav-item.item-terminal.showup {
+  z-index: 10;
+  margin-left: 664px;
+}
+
+.nav-item.item-monitor > .nav-item-label {
+  border-right: 4px solid #24d370;
+}
+
+.nav-item.item-monitor > .nav-item-container {
+  left: -320px;
+  width: 320px; height: 24em;
+}
+
+.nav-item.item-monitor.showup {
+  z-index: 10;
+  margin-left: 344px;
+}
+
+.scroller {
+  position: relative;
+  display: block;
+  text-align: center;
+  overflow: auto;
+}
+
+.watermark {
+  z-index: -1;
+  position: fixed;
+  top: 0; bottom: 0;
+  width: 100%; height: 180px;
+  margin: auto;
+  text-align: center;
+  font-size: 180px;
+  color: #454545;
+  opacity: 0.2;
+}
+
+/**
+ * Module Rule
+ * ======================================
+ */
+
+.terminal {
+  position: relative;
+  display: block;
+}
+
+.terminal-display {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  height: 21em;
+  margin: 0; padding: 1em;
+  list-style: none;
+  overflow: scroll;
+}
+
+.terminal-line {
+  display: block;
+  line-height: 1.4em;
+  word-break: break-all;
+}
+
+.terminal-input {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1em;
+  border: none;
+  border-top: 1px solid #454545;
+  color: inherit;
+  background: none;
+  font-size: inherit;
+  font-family: inherit;
+  outline: none;
+}
+
+.board-wrapper {
+  position: relative;
+  display: inline-block;
+  padding: 96px 16px;
+  text-align: center;
+}
+
+.monitor {
+  position: relative;
+  display: block;
+}
+
+.monitor-display {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  height: 21em;
+  margin: 0; padding: 1em;
+  overflow: scroll;
+}
+
+.monitor-panel {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1em;
+  border-top: 1px solid #454545;
+  text-align: center;
+  cursor: default;
+}
+
+.monitor-button {
+  display: inline-block;
+  background-color: none;
+  border: none;
+  color: inherit;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  text-transform: uppercase;
+  outline: none;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.4s ease-in-out;
+}
+
+.monitor-button:hover {
+  opacity: 1;
+}
+
+.board {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  box-shadow: 0 4px 16px 1px #252525;
+}
+
+.board-box {
+  position: relative;
+  border: 1px solid #242424;
+}
+
+.board-cell {
+  position: relative;
+  display: inline-block;
+}
+
+.board-mark {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 16px; height: 16px;
+  padding-top: 1px;
+  color: #505050;
+  font-size: 8px;
+}
+
+.board-given {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 100%; height: 18px;
+  margin: auto;
+  font-size: 18px;
+  text-align: center;
+  color: #acacac;
+}
+
+/**
+ * State Rule
+ * ======================================
+ */
+
+.float {
+  float: left;
+}
+
+.float-clear {
+  float: left;
+  clear: both;
+}
+
+.white {
+  background-color: #303030;
+}
+
+.black {
+  background-color: #353535;
+}
