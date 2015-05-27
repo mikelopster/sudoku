@@ -24,9 +24,11 @@ var helpTexts = [
   ' - help -- see help',
   ' - clear -- clear screen',
   ' - show -- show options',
-  ' - generate -- generate board',
+  ' - build -- build board',
   ' - level \'easy\' | \'medium\' | \'hard\' | \'evil\' -- set specific level',
   ' - rank n -- set specific rank to n (n**2 * n**2)',
+  ' - generate -- generate board',
+  ' - keep -- keep current board',
   ' - board x -- set specific board in json format'
 ];
 
@@ -53,25 +55,36 @@ var Renderer = (function () {
   };
 
   function fillBoard() {
-    var map, markMap, data, box, boxIndex, cellIndex, sqSize;
-    map       = options.board.toBoxHouse();
-    markMap   = options.markBoard.toBoxHouse();
-    sqSize    = options.rank * options.rank;
-    data      = {};
-    data.boxs = [];
+    var data, map, markMap, boxIndex, cellIndex, sqSize;
+    data    = Board.getDraftData();
+    map     = options.board.toBoxHouse();
+    markMap = options.markBoard.toBoxHouse();
+    sqSize  = options.rank * options.rank;
     for (boxIndex = 0; boxIndex < sqSize; boxIndex += 1) {
-      box = [];
-      box.cells = [];
       for (cellIndex = 0; cellIndex < sqSize; cellIndex += 1) {
-        box.cells.push({
+        data.boxs[boxIndex].cells[cellIndex] = {
           point : map[boxIndex][cellIndex],
           marks : markMap[boxIndex][cellIndex]
-        });
+        }
       }
-      data.boxs.push(box);
     }
-    console.log(data);
     Board.fillData(data);
+  }
+
+  function givenBoard() {
+    var data, map, markMap, boxIndex, cellIndex, sqSize;
+    data    = Board.getDraftData();
+    map     = options.board.toBoxHouse();
+    sqSize  = options.rank * options.rank;
+    for (boxIndex = 0; boxIndex < sqSize; boxIndex += 1) {
+      for (cellIndex = 0; cellIndex < sqSize; cellIndex += 1) {
+        data.boxs[boxIndex].cells[cellIndex] = {
+          point : map[boxIndex][cellIndex] === '' ? false : true
+        }
+      }
+    }
+    Board.givenData(data);
+    fillBoard();
   }
 
   function generateBoard(generate) {
@@ -79,12 +92,16 @@ var Renderer = (function () {
     min = constant.digRanges[constant.levels.indexOf(options.level)][0];
     max = constant.digRanges[constant.levels.indexOf(options.level)][0];
     dig = Math.floor(Math.random() * (max - min + 1)) + min;
-    if (generate) {
-      options.board = Generator.generate(options.rank, dig);
-    }
-    options.step      = 0;
+    return Generator.generate(options.rank, dig);
+  }
+
+  function buildBoard() {
+    options.step = 0;
     options.markBoard = SudokuBoard.newMarkBoard(options.rank);
-    fillBoard();
+    if (typeof options.board === 'undefined') {
+      options.board = SudokuBoard.newBoard(options.rank);
+    }
+    givenBoard();
   }
 
   function handleTerminal() {
@@ -97,18 +114,16 @@ var Renderer = (function () {
       if (tokens[0] === 'show' && tokens.length === 1) {
         Terminal.insert([
           'options: {',
-          '  level     : ' + options.level,
-          '  rank      : ' + options.rank,
-          '  board     : [ ... ]',
-          '  markBoard : [ ... ]',
+          '  level : ' + options.level,
+          '  rank  : ' + options.rank,
           '}'
         ]);
         return;
       }
-      if (tokens[0] === 'generate' && tokens.length === 1) {
+      if (tokens[0] === 'build' && tokens.length === 1) {
+        Monitor.insert('- Build Board!');
         Board.reCreate(options.rank);
-        Monitor.insert('- Generate Board!');
-        generateBoard(true);
+        buildBoard();
         return;
       }
       if (tokens[0] === 'level' && tokens.length === 2) {
@@ -127,15 +142,42 @@ var Renderer = (function () {
           return;
         }
       }
+      if (tokens[0] === 'generate' && tokens.length === 1) {
+        options.board = generateBoard();
+        return;
+      }
+      if (tokens[0] === 'keep' && tokens.length === 1) {
+        var data, map, size, sqSize;
+        data   = Board.getData();
+        map    = [];
+        size   = options.rank;
+        sqSize = size * size;
+        if (typeof options.board === 'undefined') {
+          Terminal.insert(['Error board not found.']);
+          return;
+        }
+        data.boxs.forEach(function (box, b) {
+          var rowOffset, colOffset, boxOffset;
+          rowOffset = Math.floor(b / size) * sqSize * size;
+          colOffset = (b % size) * size;
+          boxOffset = rowOffset + colOffset;
+          box.cells.forEach(function (cell, c) {
+            var rowOffset, colOffset, cellOffset;
+            rowOffset  = Math.floor(c / size) * sqSize;
+            colOffset  = c % size;
+            cellOffset = rowOffset + colOffset;
+            map[boxOffset + cellOffset] = cell.point;
+          });
+        });
+        options.board = SudokuBoard.newBoard(options.rank, map);
+        return;
+      }
       if (tokens[0] === 'board' &&  tokens.length === 2) {
-        Board.reCreate(options.rank);
-        options.board = SudokuBoard.newBoard(
-          options.rank,
-          JSON.parse(tokens[1])
-        );
-        generateBoard(false);
         try {
-
+          options.board = SudokuBoard.newBoard(
+            options.rank,
+            JSON.parse(tokens[1])
+          );
         } catch (error) {
           Terminal.insert(['Error input is not json format.']);
         }
@@ -159,7 +201,7 @@ var Renderer = (function () {
       fillBoard();
     });
     Monitor.onNext(function () {
-      Monitor.insert('- Solve next Step!');
+      Monitor.insert('- Solved step!');
       if (options.step === 0) {
         Solver.makeSolve(options.board, true);
       }

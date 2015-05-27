@@ -247,7 +247,7 @@ pre {
   box-sizing: border-box;
   width: 16px; height: 16px;
   padding-top: 1px;
-  color: #959595;
+  color: #24d370;
   font-size: 14px;
 }
 
@@ -260,6 +260,11 @@ pre {
   margin: auto;
   font-size: 18px;
   text-align: center;
+  color: #e25959;
+  outline: none;
+}
+
+.board-point.given {
   color: #acacac;
 }
 
