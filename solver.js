@@ -469,6 +469,7 @@ var Solver = (function () {
 			if(index != -1) {
 				operation = true;
 				checkNumber[r][i].splice(index, 1);
+				
 				//checkEmpty(r,i);
 				//console.log("Delete AT: col = " + (i+1) + ": " + checkNumber[r][i]);
 			}
@@ -1234,6 +1235,9 @@ var Solver = (function () {
 	function solved(sudokuArr,LoggingLogin) {
 		sudokuTable = sudokuArr.toRowHouse();
 		LoggingEnabled = LoggingLogin;
+		LogSudokuTable = [];
+	    LogCheckNumber = [];
+	    LogAction = [];
 
 		SudokuSolved = false;
 		// start search
