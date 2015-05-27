@@ -28,6 +28,17 @@ pre {
   word-break: break-word;
 }
 
+a {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 /**
  * Layout Rule
  * ======================================
@@ -113,6 +124,33 @@ pre {
   margin-left: 344px;
 }
 
+.nav-item.item-reference > .nav-item-label {
+  border-right: 4px solid #247dd3;
+}
+
+.nav-item.item-reference > .nav-item-container {
+  left: -480px;
+  width: 480px; height: 16em;
+}
+
+.nav-item.item-reference.showup {
+  z-index: 10;
+  margin-left: 504px;
+}
+
+.nav-item.showup > .nav-item-label:hover {
+  margin-left: -24px;
+}
+
+.nav-item.item-terminal > .nav-item-label {
+  border-right: 4px solid #e25959;
+}
+
+.nav-item.item-terminal > .nav-item-container {
+  left: -640px;
+  width: 640px; height: 24em;
+}
+
 .scroller {
   position: relative;
   display: block;
@@ -180,6 +218,12 @@ pre {
   text-align: center;
 }
 
+@media all and (min-width: 960px) {
+  .board-wrapper {
+    padding-top: 180px;
+  }
+}
+
 .monitor {
   position: relative;
   display: block;
@@ -223,6 +267,17 @@ pre {
 
 .monitor-button:hover {
   opacity: 1;
+}
+
+.reference {
+  position: relative;
+  display: block;
+  margin: 0; padding: 1em;
+}
+
+.reference-line {
+  display: block;
+  line-height: 1.4em;
 }
 
 .board {
