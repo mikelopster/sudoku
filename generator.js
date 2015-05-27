@@ -15,7 +15,6 @@ var Generator = (function (Solver) {
 				}
 			str += "\n"
 	    }
-	    console.log(str)
 	}
 
 	function board_generator(size){
@@ -51,7 +50,7 @@ var Generator = (function (Solver) {
 		    	x.push(array3[i])
 	    }
 	    return x
-	    
+
 	}
 	function get_square(board,size,i,j){
 	    var index_row = Math.floor(Math.floor(i/Math.sqrt(size))*Math.sqrt(size))
@@ -85,7 +84,7 @@ var Generator = (function (Solver) {
 					    board[i][j] = x
 					    break
 					}
-					else if (check.length == size){ 
+					else if (check.length == size){
 					    return [true,board]
 					}
 					else if (row.indexOf(x) < 0 && col.indexOf(x) < 0 && square.indexOf(x) < 0){
@@ -112,7 +111,7 @@ var Generator = (function (Solver) {
 				x.push(board[i][j])
 			}
 		}
-		return x
+		return SudokuBoard.newBoard(Math.sqrt(size), x)
 	}
 	function digging(board,element,size){
 		while(element != 0){
@@ -126,15 +125,14 @@ var Generator = (function (Solver) {
 				continue
 			}
 			while(count_size != size + 1){
-				//console.log(count_logic)
 				board[y][x] = count_size.toString()
-				Solver.print(board)
-				var kuy = board.map(function(arr) {
+				var mapBoard = board.map(function(arr) {
 					return arr.slice();
 				});
 
-				var logic = Solver.makeSolve(kuy,false)
-				console.log(logic)
+				var payBoard = change_payboard(mapBoard, size);
+
+				var logic = Solver.makeSolve(payBoard,false)
 				if (logic){
 					count_logic++
 				}
@@ -142,16 +140,15 @@ var Generator = (function (Solver) {
 			}
 			if (count_logic == 1 && board[y][x] != ""){
 				board[y][x] = ""
-				element-- 
+				element--
 			}
 			else{
 				board[y][x] = main
 			}
-			//console.log(Solver.makeSolve)
-		}	
+		}
 		return board
 	}
-	function main(element,size_pay){
+	function main(size_pay, element){
 	    var size = size_pay*size_pay
 	    var board = board_generator(size)
 	    var x = [true,board]
@@ -161,8 +158,8 @@ var Generator = (function (Solver) {
 		}
 		board = change_format(board,size)
 		board = digging(board,element,size)
-		return SudokuBoard.newBoard(size_pay,change_payboard(board,size))
-		
+		return change_payboard(board,size)
+
 	}
 	return {
 		generate: main

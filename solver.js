@@ -5,7 +5,7 @@
  */
 
 var sudokuTable = SudokuBoard.newBoard(3);
-sudokuTable.board = 
+sudokuTable.board =
 	["3","3","","","","","","8","1",
 	 "1","","9","","","","7","","4",
 	 "","7","","","9","","","3","",
@@ -102,7 +102,7 @@ var Solver = (function () {
 				}
 
 				if(checkBlock.length != 9)
-					return false; 
+					return false;
 
 			}
 		}
@@ -114,7 +114,7 @@ var Solver = (function () {
 		for(var i = 0 ; i < n* n ; i++)
 			for(var j = 0 ; j < n*n ; j++) {
 				if(checkNumber[i][j].length == 0) {
-					if(sudokuTable[i][j] == "") 
+					if(sudokuTable[i][j] == "")
 						return true;
 				}
 			}
@@ -188,7 +188,7 @@ var Solver = (function () {
 						checkNumber[r][c].push(sudokuTable[i][j]);
 				}
 			}
-		} 
+		}
 	}
 
 	function RemainNumber(r,c) {
@@ -245,7 +245,7 @@ var Solver = (function () {
 					//checkEmpty(i,j);
 				}
 			}
-		} 
+		}
 	}
 
 	function removeNumberInCheckerRow(r,num) {
@@ -298,7 +298,7 @@ var Solver = (function () {
 				display += "-------------------\n";
 			}
 		}
-		
+
 		console.log(display);
 	}
 
@@ -327,12 +327,15 @@ var Solver = (function () {
 				display += "-------------------\n";
 			}
 		}
-		
+
 		console.log(display);
 	}
 
 	function getLoggingSudokuTableThisStep(index) {
-		var currentSudokuTable;
+		var currentSudokuTable = [];
+
+		if(index >= LogSudokuTable.length)
+			index = LogSudokuTable.length - 1;
 
 		for(var i = 0 ; i < n*n ; i++) {
 			for(var j = 0 ; j < n*n ; j++) {
@@ -345,11 +348,20 @@ var Solver = (function () {
 	}
 
 	function getLoggingSudokuCheckNumberThisStep(index) {
-		var currentCheckNumber;
+		var currentCheckNumber = [];
+
+		if(index >= LogCheckNumber.length)
+			index = LogCheckNumber.length - 1;
 
 		for(var i = 0 ; i < n*n ; i++) {
 			for(var j = 0 ; j < n*n ; j++) {
-				currentCheckNumber.push(LogCheckNumber[index][i][j]);
+				var newLogAdd = LogCheckNumber[index][i][j];
+
+				if(newLogAdd.length < 9) {
+					for(var k = newLogAdd.length ; k < 9 ; k++)
+						newLogAdd.push("");
+				}
+				currentCheckNumber.push(newLogAdd);
 			}
 		}
 
@@ -357,14 +369,20 @@ var Solver = (function () {
 	}
 
 	function getLoggingActionThisStep(index) {
-		var currentAction = LogAction[index];
+
+		var currentAction;
+		if(index < LogAction.length)
+			currentAction = LogAction[index];
+		else
+			currentAction = "Completed.";
+
 
 		return currentAction;
 	}
 
 	function getSuccessBoard() {
 
-		var successBoard;
+		var successBoard = [];
 
 		for(var i = 0 ; i < n*n ; i++) {
 			for(var j = 0 ; j < n*n ; j++) {
@@ -621,7 +639,7 @@ var Solver = (function () {
 	function getColNumberInBlock(r,c,value) {
 
 		var index = [];
-		
+
 
 
 		for(var i = c ; i < c + n ; i++) {
@@ -661,13 +679,12 @@ var Solver = (function () {
 			for(var i = 0 ; i < n*n ; i++) {
 				temp_checkNumber[i] = [];
 			}
-			
+
 			for(var i = 0 ; i < n*n ; i++) {
 				for(var j = 0 ; j < n*n ; j++) {
 					temp_checkNumber[i][j] = checkNumber[i][j].slice();
 				}
 			}
-
 			LogCheckNumber.push(temp_checkNumber);
 			LogAction.push(action);
 		}
@@ -683,7 +700,7 @@ var Solver = (function () {
 				for(var j = 0 ; j < n*n; j++) {
 					if(checkNumber[i][j].length == 1 && sudokuTable[i][j] == "") {
 						nakedSingle = true;
-						var value = checkNumber[i][j][0];				
+						var value = checkNumber[i][j][0];
 						sudokuTable[i][j] = value;
 						checkNumber[i][j] = [];
 						removeAll(i,j,value);
@@ -696,7 +713,7 @@ var Solver = (function () {
 
 			//if(nakedSingle)
 			//	printTable("New" + time++);
-				
+
 
 			var hiddenSingle = false;
 
@@ -722,11 +739,11 @@ var Solver = (function () {
 
 					var newCol = [];
 
-					for(var k = 0 ; k < n*n ; k++) 
+					for(var k = 0 ; k < n*n ; k++)
 						newCol.push(checkNumber[k][j]);
-					
-					var index = getIndexChecknumber(newCol,num);	
-					if(index != -1) {				
+
+					var index = getIndexChecknumber(newCol,num);
+					if(index != -1) {
 						sudokuTable[index][j] = num;
 						checkNumber[index][j] = [];
 						removeAll(index,j,num);
@@ -753,13 +770,13 @@ var Solver = (function () {
 								newBlock.push(checkNumber[in_i][in_j]);
 								newXY.push([in_i,in_j]);
 							}
-						} 	
+						}
 
 						var index = getIndexChecknumber(newBlock,num);
-						
+
 						if(index != -1) {
 							var new_x = newXY[index][0];
-							var new_y = newXY[index][1];						
+							var new_y = newXY[index][1];
 							sudokuTable[new_x][new_y] = num;
 							checkNumber[new_x][new_y] = [];
 							removeAll(new_x,new_y,num);
@@ -779,7 +796,7 @@ var Solver = (function () {
 		//		printTable("New" + time++);
 
 
-			
+
 
 			var intersectCheckClaiming = false;
 
@@ -793,7 +810,7 @@ var Solver = (function () {
 
 
 					if(index.length == 0) continue;
-					var first_value = index[0]; 
+					var first_value = index[0];
 					var last_value = index[index.length-1];
 
 
@@ -809,14 +826,14 @@ var Solver = (function () {
 
 
 						// choose block
-						if(first_value < 3) 
+						if(first_value < 3)
 							block_index = 0;
-						else if(first_value < 6) 
+						else if(first_value < 6)
 							block_index = 3;
-						else if(first_value < 9) 
+						else if(first_value < 9)
 							block_index = 6;
 
-						
+
 						// for(var k = 0 ; k < index.length ; k++) {
 						// 	console.log("ThisBlockAT: (" + (i+1) + "," + (index[k]) + ") = " + checkNumber[i][index[k]]);
 						// }
@@ -842,7 +859,7 @@ var Solver = (function () {
 
 						//console.log("(IntersectClaiming)Found At: row = " + (i+1) + ", block = " + block_index + ", num = " + num);
 						addLogging("(IntersectClaiming)Found At: row = " + (i+1) + ", block = " + block_index + ", num = " + num);
-						
+
 					}
 				}
 			}
@@ -854,12 +871,12 @@ var Solver = (function () {
 					var num = NumberCheckerCol[i][num_index];
 					var newCol = [];
 
-					for(var k = 0 ; k < n*n ; k++) 
+					for(var k = 0 ; k < n*n ; k++)
 						newCol.push(checkNumber[k][i]);
 
 					var index = getIndexFromRowCol(newCol,num);
 					if(index.length == 0) continue;
-					var first_value = index[0]; 
+					var first_value = index[0];
 					var last_value = index[index.length-1];
 
 
@@ -874,14 +891,14 @@ var Solver = (function () {
 					if(diff) {
 
 						// choose block
-						if(first_value < 3) 
+						if(first_value < 3)
 							block_index = 0;
-						else if(first_value < 6) 
+						else if(first_value < 6)
 							block_index = 3;
-						else if(first_value < 9) 
+						else if(first_value < 9)
 							block_index = 6;
 
-						
+
 
 						// for(var k = 0 ; k < index.length ; k++) {
 						// 	console.log("ThisBlockAT: (" + (index[k]) +","+ (i+1) + ") = " + checkNumber[i][index[k]]);
@@ -908,7 +925,7 @@ var Solver = (function () {
 
 						//console.log("(IntersectClaiming)Found At: col = " + (i+1) + ", block = " + block_index + ", num = " + num);
 						addLogging("(IntersectClaiming)Found At: col = " + (i+1) + ", block = " + block_index + ", num = " + num);
-						
+
 					}
 				}
 			}
@@ -927,7 +944,7 @@ var Solver = (function () {
 								//console.log("(IntersectPointing)Found At: row = " + (index1+1) + ", block = (" + (i+1) + "," + (j+1) + ")" + ", num = " + num);
 								addLogging("(IntersectPointing)Found At: row = " + (index1+1) + ", block = (" + (i+1) + "," + (j+1) + ")" + ", num = " + num);
 							}
-							
+
 						}
 
 						// column
@@ -936,20 +953,20 @@ var Solver = (function () {
 							intersectPointing = removeInColWithoutThisBlock(i,index2,num);
 							if(intersectPointing) {
 								//console.log("(IntersectPointing)Found At: col = " + (index2+1) + ", block = (" + (i+1) + "," + (j+1) + ")" + ", num = " + num);
-								addLogging("(IntersectPointing)Found At: col = " + (index2+1) + ", block = (" + (i+1) + "," + (j+1) + ")" + ", num = " + num);							
+								addLogging("(IntersectPointing)Found At: col = " + (index2+1) + ", block = (" + (i+1) + "," + (j+1) + ")" + ", num = " + num);
 							}
-								
+
 						}
-						
+
 					}
-					
-					
+
+
 				}
 			}
 
-			
 
-			
+
+
 			var nakedPair = false;
 
 			// row
@@ -966,7 +983,7 @@ var Solver = (function () {
 
 				//console.log(findPair);
 
-			
+
 				if(findPair.length >= 2) {
 					var max_length = findPair.length;
 					for(var k = 0 ; k < max_length ; k++) {
@@ -979,7 +996,7 @@ var Solver = (function () {
 									//console.log("(NakedPair)Found At: (" + (i+1) + "," + (indexPair[k]+1) + "),(" + (i+1) + "," + (indexPair[l]+1) + "), num = " + findPair[k]);
 									addLogging("(NakedPair)Found At: (" + (i+1) + "," + (indexPair[k]+1) + "),(" + (i+1) + "," + (indexPair[l]+1) + "), num = " + findPair[k]);
 								}
-								
+
 							}
 						}
 					}
@@ -1002,7 +1019,7 @@ var Solver = (function () {
 
 				//console.log(findPair);
 
-			
+
 				if(findPair.length >= 2) {
 					var max_length = findPair.length;
 					for(var k = 0 ; k < max_length ; k++) {
@@ -1015,7 +1032,7 @@ var Solver = (function () {
 									//console.log("(NakedPair)Found At: (" + (indexPair[k]+1) + "," + (i+1)  + "),(" + (indexPair[l]+1) + "," + (i+1) + "), num = " + findPair[k]);
 									addLogging("(NakedPair)Found At: (" + (indexPair[k]+1) + "," + (i+1)  + "),(" + (indexPair[l]+1) + "," + (i+1) + "), num = " + findPair[k]);
 								}
-								
+
 							}
 						}
 					}
@@ -1037,7 +1054,7 @@ var Solver = (function () {
 							}
 						}
 					}
-					
+
 
 					if(findPair.length >= 2) {
 						var max_length = findPair.length;
@@ -1051,19 +1068,19 @@ var Solver = (function () {
 										//console.log("(NakedPair)Found At: (" + (indexPair[k][0]+1) + "," + (indexPair[k][1]+1)  + "),(" + (indexPair[l][0]+1) + "," + (indexPair[l][1]+1) + "), num = " + findPair[k]);
 										addLogging("(NakedPair)Found At: (" + (indexPair[k][0]+1) + "," + (indexPair[k][1]+1)  + "),(" + (indexPair[l][0]+1) + "," + (indexPair[l][1]+1) + "), num = " + findPair[k]);
 									}
-									
+
 								}
 							}
 						}
 
 					}
-				}		
+				}
 			}
 
 
 			if(!nakedSingle && !hiddenSingle && !intersectCheckClaiming && !intersectPointing && !nakedPair)
 				break;
-			
+
 		}
 	}
 
@@ -1082,7 +1099,7 @@ var Solver = (function () {
 
 				// create temp
 				var temp_sudokuTable,temp_NumberCheckerRow,temp_NumberCheckerCol,temp_checkNumber = [];
-				
+
 				temp_sudokuTable = sudokuTable.map(function(arr) {
 					return arr.slice();
 				});
@@ -1102,20 +1119,20 @@ var Solver = (function () {
 				}
 
 				//console.log("CheckNumber On False");
-				
+
 				for(var i = 0 ; i < n*n ; i++) {
 					for(var j = 0 ; j < n*n ; j++) {
 						temp_checkNumber[i][j] = checkNumber[i][j].slice();
 					}
 				}
 
-				// choose random number 
+				// choose random number
 				random_index = 0;
 				random_x = -1;
 				random_y = -1;
 
 				var pairFound = false;
-				
+
 				for(var i = 0 ; i < n*n ; i++) {
 					for(var j = 0 ; j < n*n ; j++) {
 						if(checkNumber[i][j].length == 2) {
@@ -1153,7 +1170,7 @@ var Solver = (function () {
 					for(var i = 0 ; i < n*n ; i++) {
 						checkNumber[i] = [];
 					}
-					
+
 					for(var i = 0 ; i < n*n ; i++) {
 						for(var j = 0 ; j < n*n ; j++) {
 							checkNumber[i][j] = old_temp_checkNumber[i][j].slice();
@@ -1204,7 +1221,7 @@ var Solver = (function () {
 
 				//console.log("CheckNumber On True");
 				//console.log("Test: (" + x + "," + y + ")");
-				
+
 				for(var i = 0 ; i < n*n ; i++) {
 					for(var j = 0 ; j < n*n ; j++) {
 						checkNumber[i][j] = temp_checkNumber[i][j].slice();
@@ -1229,10 +1246,10 @@ var Solver = (function () {
 			SudokuSolved = true;
 			return ;
 		}
-			
+
 	}
 
-	function solved(sudokuArr,LoggingLogin) {
+	function solved(sudokuArr,LoggingLogin, callback) {
 		sudokuTable = sudokuArr.toRowHouse();
 		LoggingEnabled = LoggingLogin;
 		LogSudokuTable = [];
@@ -1243,7 +1260,7 @@ var Solver = (function () {
 		// start search
 		for(var i = 0 ; i < n*n ; i++) {
 			InitCheckNumber(i);
-			for(var j = 0 ; j < n*n ; j++) { 
+			for(var j = 0 ; j < n*n ; j++) {
 				if(sudokuTable[i][j] == "") {
 					checkRow(i,j);
 					checkCol(i,j);
@@ -1276,14 +1293,16 @@ var Solver = (function () {
 		// console.log("Solved: " + SudokuSolved);
 		// printTable("Last Result");
 
+		if (typeof callback !== 'undefined') {
+			callback(SudokuSolved && checkTableRow && checkTableCol && checkTableBlock);
+		}
 		return (SudokuSolved && checkTableRow && checkTableCol && checkTableBlock);
-
 	}
 
 
 	return {
-		makeSolve: function(sudoArr,LoggingLogin) {
-			return solved(sudoArr,LoggingLogin);
+		makeSolve: function(sudoArr,LoggingLogin, callback) {
+			return solved(sudoArr,LoggingLogin, callback);
 		},
 		print : function(sudoArr) {
 			showResultInputTable(sudoArr);
@@ -1302,5 +1321,3 @@ var Solver = (function () {
 		}
 	}
 }());
-
-

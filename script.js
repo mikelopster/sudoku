@@ -29,6 +29,9 @@
         if (actives.indexOf(item) < 0) {
           item.classList.add('showup');
           actives.push(item);
+          if (item.hasAttribute('exec')) {
+            eval(item.getAttribute('exec'));
+          }
         }
       });
     });
@@ -93,6 +96,9 @@ var Terminal = (function () {
       while (display.firstChild) {
         display.removeChild(display.firstChild);
       }
+    },
+    focus: function () {
+      input.focus();
     }
   };
 
@@ -107,10 +113,10 @@ var Monitor = (function () {
 
   'use strict';
 
-  var monitor, display, solve, next, clear, solving, nexting;
+  var monitor, display, solve, next, check, clear, solving, nexting, checking;
 
   function insertToDisplay(text) {
-    display.textContent += '- ' + text + '\n';
+    display.textContent += text + '\n';
     display.scrollTop    = display.scrollHeight;
   }
 
@@ -119,6 +125,7 @@ var Monitor = (function () {
     display = monitor.querySelector('.monitor-display');
     solve   = monitor.querySelector('.monitor-button.solve');
     next    = monitor.querySelector('.monitor-button.next');
+    check   = monitor.querySelector('.monitor-button.check');
     clear   = monitor.querySelector('.monitor-button.clear');
     solve.addEventListener('click', function () {
       if (typeof solving !== 'undefined') {
@@ -128,6 +135,11 @@ var Monitor = (function () {
     next.addEventListener('click', function () {
       if (typeof nexting !== 'undefined') {
         nexting();
+      }
+    });
+    check.addEventListener('click', function () {
+      if (typeof checking !== 'undefined') {
+        checking();
       }
     });
     clear.addEventListener('click', function () {
@@ -141,6 +153,9 @@ var Monitor = (function () {
     },
     onNext: function (callback) {
       nexting = callback;
+    },
+    onCheck: function (callback) {
+      checking = callback;
     },
     insert: function (text) {
       insertToDisplay(text);
@@ -166,11 +181,41 @@ var Board = (function () {
     xWidth : 18
   };
 
+  function generateMap() {
+    map = {};
+    map.board = board;
+    map.boxs  = [].slice.call(board.querySelectorAll('.board-box'));
+    map.boxs.forEach(function (box) {
+      box.cells = [].slice.call(box.querySelectorAll('.board-cell'));
+      box.cells.forEach(function (cell) {
+        cell.point = cell.querySelector('.board-point');
+        cell.marks = [].slice.call(cell.querySelectorAll('.board-mark'));
+      });
+    });
+  }
+
+  function draftData() {
+    var boxs, cells, sqSize, boxIndex, cellIndex;
+    sqSize = options.size * options.size;
+    boxs   = [];
+    for (boxIndex = 0; boxIndex < sqSize; boxIndex += 1) {
+      cells = [];
+      for (cellIndex = 0; cellIndex < sqSize; cellIndex += 1) {
+        cells.push({
+          point : undefined,
+          marks : []
+        });
+      }
+      boxs.push({ cells: cells });
+    }
+    return { boxs: boxs };
+  }
+
   function mapping(data) {
     data.boxs.forEach(function (box, b) {
       box.cells.forEach(function (cell, c) {
-        if (typeof cell.given !== 'undefined') {
-          map.boxs[b].cells[c].given.textContent = cell.given;
+        if (typeof cell.point !== 'undefined') {
+          map.boxs[b].cells[c].point.textContent = cell.point;
         }
         cell.marks.forEach(function (mark, m) {
           if (typeof mark !== 'undefined') {
@@ -181,20 +226,17 @@ var Board = (function () {
     });
   }
 
-  function generateMap() {
-    map = {};
-    map.board = board;
-    map.boxs  = [].slice.call(board.querySelectorAll('.board-box'));
-    map.boxs.forEach(function (box) {
-      box.cells = [].slice.call(box.querySelectorAll('.board-cell'));
-      box.cells.forEach(function (cell) {
-        cell.given = cell.querySelector('.board-given');
-        cell.marks = [].slice.call(cell.querySelectorAll('.board-mark'));
+  function pointing(data) {
+    map.boxs.forEach(function (box, b) {
+      box.cells.forEach(function (cell, c) {
+        if (data.boxs[b].cells[c].point) {
+          map.boxs[b].cells[c].point.classList.add('given');
+        }
       });
     });
   }
 
-  function coloring() {
+  function backgroundColoring() {
     var cells, choices, index;
     cells   = board.querySelectorAll('.board-cell');
     choices = ['white', 'black'];
@@ -225,15 +267,16 @@ var Board = (function () {
   }
 
   function createCells(box) {
-    var cell, given, index;
+    var cell, point, index;
     for (index = 0; index < options.sqSize; index += 1) {
       cell  = document.createElement('div');
-      given = document.createElement('div');
-      cell.appendChild(given);
+      point = document.createElement('div');
+      point.setAttribute('contentEditable', 'true');
+      cell.appendChild(point);
       box.appendChild(cell);
       createMarks(cell);
       setStyle(cell, 'cell', index);
-      setStyle(given, 'given');
+      setStyle(point, 'point');
     }
   }
 
@@ -256,7 +299,7 @@ var Board = (function () {
     scroller  = container.parentNode;
     container.style.width = size * size * size * options.xWidth + 'px';
     scroller.scrollLeft   = (scroller.scrollWidth - scroller.clientWidth) / 2;
-    coloring();
+    backgroundColoring();
     generateMap();
   }
 
@@ -272,28 +315,30 @@ var Board = (function () {
   });
 
   return {
-    reCreate: function(size) {
+    reCreate: function (size) {
       newBoard();
       createBoard(size);
     },
-    fillData: function(data) {
+    fillData: function (data) {
       mapping(data);
     },
-    draftData: function (size) {
-      var boxs, cells, sqSize, boxIndex, cellIndex;
-      sqSize = size * size;
-      boxs   = [];
+    givenData: function (data) {
+      pointing(data);
+    },
+    getData: function () {
+      var data, boxIndex, cellIndex, sqSize;
+      data   = draftData();
+      sqSize = options.size * options.size;
       for (boxIndex = 0; boxIndex < sqSize; boxIndex += 1) {
-        cells = [];
         for (cellIndex = 0; cellIndex < sqSize; cellIndex += 1) {
-          cells.push({
-            given : undefined,
-            marks : []
-          });
+          data.boxs[boxIndex].cells[cellIndex].point =
+          map.boxs[boxIndex].cells[cellIndex].point.textContent;
         }
-        boxs.push({ cells: cells });
       }
-      return { boxs: boxs };
+      return data;
+    },
+    getDraftData: function () {
+      return draftData();
     }
   };
 
